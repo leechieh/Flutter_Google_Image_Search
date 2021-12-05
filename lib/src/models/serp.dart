@@ -1,8 +1,7 @@
 import 'package:image_search/index.dart';
 import 'package:http/http.dart' as http;
 
-const String serpKey =
-    '103d703e1130f9c8fef19a36d30162a40bb756abc0fa2e6ef791e70c37fec343';
+const String serpKey = 'YourOwnSerpAPIKey';
 
 String requestUrl({
   required String searchTerm,
