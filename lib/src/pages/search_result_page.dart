@@ -39,7 +39,11 @@ class _SearchResultPageState extends State<SearchResultPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          widget.searchResponse.searchParameters['q'],
+        ),
+      ),
       body: Center(
         child: NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification scrollNotification) {
