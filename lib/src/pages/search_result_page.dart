@@ -61,13 +61,18 @@ class _SearchResultPageState extends State<SearchResultPage> {
         ),
       ),
       body: Center(
-        child: GridView.count(
-          controller: _scrollController,
-          scrollDirection: Axis.vertical,
-          crossAxisCount: 3,
-          childAspectRatio: 1 / 1,
-          physics: const AlwaysScrollableScrollPhysics(),
-          children: showList,
+        child: Container(
+          color: Colors.black,
+          child: GridView.count(
+            controller: _scrollController,
+            scrollDirection: Axis.vertical,
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(2),
+            childAspectRatio: 1 / 1,
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: showList,
+          ),
         ),
       ),
     );

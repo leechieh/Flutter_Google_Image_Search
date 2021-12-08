@@ -22,7 +22,20 @@ class ImageGridItem extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) {
-    // precacheImage(originalImage, context);
+    bool linkBroken = false;
+    precacheImage(
+      originalImage,
+      context,
+      onError: (_, __) {
+        linkBroken = true;
+        precacheImage(
+          CachedNetworkImageProvider(
+            thumbnail,
+          ),
+          context,
+        );
+      },
+    );
     return OpenContainer(
       closedBuilder: (_, __) {
         return InkWell(
@@ -37,7 +50,14 @@ class ImageGridItem extends StatelessWidget {
         );
       },
       openBuilder: (BuildContext context, __) {
-        return ImageScreen(originalImage: originalImage, original: original);
+        return ImageScreen(
+          originalImage: linkBroken
+              ? CachedNetworkImageProvider(
+                  thumbnail,
+                )
+              : originalImage,
+          original: linkBroken ? thumbnail : original,
+        );
       },
       transitionDuration: const Duration(milliseconds: 300),
     );
