@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:image_search/index.dart';
 
 class ImageGridItem extends StatelessWidget {
@@ -5,7 +6,7 @@ class ImageGridItem extends StatelessWidget {
   final String original;
   final int position;
   final String link;
-  final Image originalImage;
+  final CachedNetworkImageProvider originalImage;
 
   const ImageGridItem({
     required this.original,
@@ -35,19 +36,20 @@ class ImageGridItem extends StatelessWidget {
                   children: <Widget>[
                     SizedBox.expand(
                       child: PhotoView(
-                        imageProvider: originalImage.image,
+                        imageProvider: originalImage,
                       ),
                     ),
                     Positioned(
-                      top: 10,
+                      top: 20,
                       right: 10,
                       child: IconButton(
+                        iconSize: 30,
                         color: Colors.black,
                         onPressed: () {
                           Navigator.pop(context);
                         },
                         icon: const Icon(
-                          Icons.close,
+                          Icons.close_rounded,
                           color: Colors.white,
                         ),
                       ),
@@ -57,15 +59,22 @@ class ImageGridItem extends StatelessWidget {
                       left: MediaQuery.of(context).size.width / 2 - 23,
                       child: IconButton(
                         color: Colors.black,
-                        onPressed: () {
-                          GallerySaver.saveImage(original);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Image Saved',
+                        onPressed: () async {
+                          bool pass = false;
+                          if (Platform.isIOS) {
+                            pass = await Permission.photos.request().isGranted;
+                            if (!pass) {}
+                          }
+                          if (pass || Platform.isAndroid) {
+                            GallerySaver.saveImage(original);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Image Saved',
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         },
                         icon: const Icon(
                           Icons.save,
@@ -82,8 +91,9 @@ class ImageGridItem extends StatelessWidget {
       },
       child: AspectRatio(
         aspectRatio: 1 / 1,
-        child: Image.network(
-          thumbnail,
+        child: FadeInImage.memoryNetwork(
+          placeholder: kTransparentImage,
+          image: thumbnail,
           fit: BoxFit.cover,
         ),
       ),

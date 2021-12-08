@@ -1,10 +1,12 @@
 import 'package:image_search/index.dart';
-import 'package:image_search/src/components/image_grid_item.dart';
 
 class SearchResultPage extends StatefulWidget {
-  final SearchResponse searchResponse;
+  // final SearchResponse searchResponse;
+  final List<ImageGridItem> searchResponse;
+  final String searchTerm;
 
-  const SearchResultPage({required this.searchResponse, Key? key})
+  const SearchResultPage(
+      {required this.searchResponse, required this.searchTerm, Key? key})
       : super(key: key);
 
   @override
@@ -13,69 +15,67 @@ class SearchResultPage extends StatefulWidget {
 
 class _SearchResultPageState extends State<SearchResultPage> {
   late int itemsNumber;
+  late ScrollController _scrollController;
+  late List<ImageGridItem> showList = [];
 
   @override
   void initState() {
     super.initState();
-    itemsNumber = (widget.searchResponse.imagesResults.length < 18)
-        ? widget.searchResponse.imagesResults.length
-        : 18;
+    itemsNumber =
+        (widget.searchResponse.length < 18) ? widget.searchResponse.length : 18;
+    _scrollController = ScrollController(initialScrollOffset: 5.0)
+      ..addListener(_scrollListener);
+    for (int index = 0; index < itemsNumber; index++) {
+      if (index < itemsNumber) {
+        showList.add(widget.searchResponse[index]);
+        index += 1;
+      }
+    }
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent * 0.8 &&
+        !_scrollController.position.outOfRange) {
+      setState(() {
+        itemsNumber = (itemsNumber + 12 <= widget.searchResponse.length)
+            ? itemsNumber + 12
+            : widget.searchResponse.length;
+        addItemIntoLisT(itemsNumber);
+      });
+    }
+  }
+
+  void addItemIntoLisT(int totalItemCount) {
+    for (int i = showList.length; i < totalItemCount; i++) {
+      showList.add(widget.searchResponse[i]);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<ImageGridItem> list = [];
-
-    for (dynamic entry in widget.searchResponse.imagesResults) {
-      list.add(
-        ImageGridItem(
-          original: entry['original'],
-          originalImage: Image.network(entry['original']),
-          position: entry['position'],
-          link: entry['link'],
-          thumbnail: entry['thumbnail'],
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.searchResponse.searchParameters['q'],
+          widget.searchTerm,
         ),
       ),
       body: Center(
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (ScrollNotification scrollNotification) {
-            if (scrollNotification.metrics.pixels ==
-                scrollNotification.metrics.maxScrollExtent) {
-              setState(() {
-                itemsNumber += 9;
-              });
-            }
-            return false;
-          },
-          child: Container(
-            color: Colors.black,
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 1 / 1,
-                crossAxisCount: 3,
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-              ),
-              itemCount:
-                  (itemsNumber < list.length) ? itemsNumber : list.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 2, bottom: 2),
-              itemBuilder: ((BuildContext context, int index) {
-                precacheImage(list[index].originalImage.image, context);
-                return list[index];
-              }),
-            ),
-          ),
+        child: GridView.count(
+          controller: _scrollController,
+          scrollDirection: Axis.vertical,
+          crossAxisCount: 3,
+          childAspectRatio: 1 / 1,
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: showList,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
