@@ -87,10 +87,6 @@ class _SearchFormState extends State<SearchForm> {
                               ),
                             );
                           }
-                          setState(() {
-                            loading = false;
-                          });
-
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (BuildContext context) {
@@ -100,6 +96,9 @@ class _SearchFormState extends State<SearchForm> {
                               );
                             }),
                           );
+                          setState(() {
+                            loading = false;
+                          });
                         }
                       },
                       child: const Text('Submit'),

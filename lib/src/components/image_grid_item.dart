@@ -59,7 +59,9 @@ class ImageGridItem extends StatelessWidget {
           original: linkBroken ? thumbnail : original,
         );
       },
-      transitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(
+        milliseconds: 300,
+      ),
     );
   }
 }

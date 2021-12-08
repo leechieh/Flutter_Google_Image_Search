@@ -66,9 +66,11 @@ class _SearchResultPageState extends State<SearchResultPage> {
           child: GridView.count(
             controller: _scrollController,
             scrollDirection: Axis.vertical,
+            crossAxisSpacing: 2,
+            mainAxisSpacing: 2,
             crossAxisCount: 3,
             shrinkWrap: true,
-            padding: const EdgeInsets.all(2),
+            // padding: const EdgeInsets.all(2),
             childAspectRatio: 1 / 1,
             physics: const AlwaysScrollableScrollPhysics(),
             children: showList,
