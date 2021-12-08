@@ -8,13 +8,22 @@ Once the app is running, the user is able to type in the term wish to search ins
 ## Dependencies
 ```yaml
 dependencies:
+  animations: ^2.0.2
+  cached_network_image: ^3.2.0
   gallery_saver: ^2.3.2
   http: ^0.13.4
+  permission_handler: ^8.3.0
   photo_view: ^0.13.0
+  flutter_spinkit: ^5.1.0
+  transparent_image: ^2.0.0
 ```
 
 ## Versioning
-Version 1.0 (First deployment)
+Version 1.01 
+
+## Changes
+Bug fixes, add animation and loading screen.
+
 ## Screenshot
 <img src="screenshot/app.png" alt="drawing" width="216"/>
 
