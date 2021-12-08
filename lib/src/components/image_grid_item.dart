@@ -1,4 +1,3 @@
-
 import 'package:image_search/index.dart';
 
 class ImageGridItem extends StatelessWidget {
@@ -23,28 +22,24 @@ class ImageGridItem extends StatelessWidget {
   Widget build(
     BuildContext context,
   ) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (
-              BuildContext context,
-            ) {
-              return ImageScreen(
-                  originalImage: originalImage, original: original);
-            },
+    // precacheImage(originalImage, context);
+    return OpenContainer(
+      closedBuilder: (_, __) {
+        return InkWell(
+          child: AspectRatio(
+            aspectRatio: 1 / 1,
+            child: FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: thumbnail,
+              fit: BoxFit.cover,
+            ),
           ),
         );
       },
-      child: AspectRatio(
-        aspectRatio: 1 / 1,
-        child: FadeInImage.memoryNetwork(
-          placeholder: kTransparentImage,
-          image: thumbnail,
-          fit: BoxFit.cover,
-        ),
-      ),
+      openBuilder: (BuildContext context, __) {
+        return ImageScreen(originalImage: originalImage, original: original);
+      },
+      transitionDuration: const Duration(milliseconds: 300),
     );
   }
 }
