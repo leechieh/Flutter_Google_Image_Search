@@ -87,6 +87,9 @@ class _SearchFormState extends State<SearchForm> {
                               ),
                             );
                           }
+                          setState(() {
+                            loading = false;
+                          });
 
                           Navigator.push(
                             context,
