@@ -22,7 +22,7 @@ class ImageScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 20,
+            top: 30,
             right: 10,
             child: IconButton(
               iconSize: 30,
@@ -44,8 +44,16 @@ class ImageScreen extends StatelessWidget {
               onPressed: () async {
                 bool pass = false;
                 if (Platform.isIOS) {
-                  pass = await Permission.photos.request().isGranted;
-                  if (!pass) {}
+                  if (!(await Permission.storage.request().isGranted)) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const PermissionDialog();
+                      },
+                    );
+                  } else {
+                    pass = true;
+                  }
                 }
                 if (pass || Platform.isAndroid) {
                   GallerySaver.saveImage(original);
