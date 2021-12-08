@@ -70,7 +70,6 @@ class _SearchResultPageState extends State<SearchResultPage> {
             mainAxisSpacing: 2,
             crossAxisCount: 3,
             shrinkWrap: true,
-            // padding: const EdgeInsets.all(2),
             childAspectRatio: 1 / 1,
             physics: const AlwaysScrollableScrollPhysics(),
             children: showList,

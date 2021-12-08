@@ -23,9 +23,11 @@ class ImageGridItem extends StatelessWidget {
     BuildContext context,
   ) {
     bool linkBroken = false;
+
     precacheImage(
       originalImage,
       context,
+      // In case original url is broken, use thumbnail url instead
       onError: (_, __) {
         linkBroken = true;
         precacheImage(
